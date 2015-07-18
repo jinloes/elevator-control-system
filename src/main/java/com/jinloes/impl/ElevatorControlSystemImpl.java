@@ -4,37 +4,39 @@ import com.jinloes.api.Direction;
 import com.jinloes.api.Elevator;
 import com.jinloes.api.ElevatorControlSystem;
 import com.jinloes.api.Status;
-import com.jinloes.model.Call;
+import com.jinloes.model.PickUpCall;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Queue;
 
 /**
- * Created by jinloes on 7/17/15.
+ * Implementation of {@link ElevatorControlSystem}.
  */
 public final class ElevatorControlSystemImpl implements ElevatorControlSystem {
     private final int topFloor;
-    private final Queue<Call> calls;
+    private final Queue<PickUpCall> pickUpCalls;
     private final Elevator elevator;
 
+    public ElevatorControlSystemImpl(Elevator elevator) {
+        this(10, elevator);
+    }
 
     public ElevatorControlSystemImpl(int topFloor, Elevator elevator) {
         this.topFloor = topFloor;
-        this.calls = new ArrayDeque<>();
+        this.pickUpCalls = new ArrayDeque<>();
         this.elevator = elevator;
     }
 
     @Override
-    public void call(Call call) {
-        int callFloor = call.getFloor();
+    public void callForPickup(PickUpCall pickUpCall) {
+        int callFloor = pickUpCall.getFloor();
         if (callFloor > topFloor) {
-            throw new IllegalArgumentException(String.format("Floor: %s is greater than the top floor: %s", callFloor,
-                    topFloor));
+            throw new IllegalArgumentException(
+                    String.format("Floor: %s is greater than the top floor: %s", callFloor,
+                            topFloor));
         }
-        if (callFloor < 0) {
-            throw new IllegalArgumentException("Floor cannot be less than 0.");
-        }
-        if(!calls.contains(call)) {
-            calls.add(call);
+        if (!pickUpCalls.contains(pickUpCall)) {
+            pickUpCalls.add(pickUpCall);
         }
     }
 
@@ -46,30 +48,32 @@ public final class ElevatorControlSystemImpl implements ElevatorControlSystem {
     public void step() {
         switch (elevator.getStatus()) {
             case IDLE:
-                if (!calls.isEmpty()) {
-                    elevator.addDestination(calls.poll().getFloor());
+                if (!pickUpCalls.isEmpty()) {
+                    elevator.addDestination(pickUpCalls.poll().getFloor());
                 }
                 break;
             case IN_USE:
                 switch (elevator.getDirection()) {
                     case UP:
                         elevator.moveUp();
-                        Call currentFloorCall = Call.of(Direction.UP, elevator.getCurrentFloor());
-                        if(calls.contains(currentFloorCall)) {
-                            calls.remove(currentFloorCall);
+                        PickUpCall currentFloorPickUpCall = PickUpCall.of(Direction.UP,
+                                elevator.getCurrentFloor());
+                        if (pickUpCalls.contains(currentFloorPickUpCall)) {
+                            pickUpCalls.remove(currentFloorPickUpCall);
                         }
                         break;
                     case DOWN:
                         elevator.moveDown();
-                        currentFloorCall = Call.of(Direction.DOWN, elevator.getCurrentFloor());
-                        if(calls.contains(currentFloorCall)) {
-                            calls.remove(currentFloorCall);
+                        currentFloorPickUpCall = PickUpCall.of(Direction.DOWN,
+                                elevator.getCurrentFloor());
+                        if (pickUpCalls.contains(currentFloorPickUpCall)) {
+                            pickUpCalls.remove(currentFloorPickUpCall);
                         }
                         break;
                 }
                 break;
         }
-        if(!elevator.hasDestination()) {
+        if (!elevator.hasDestination()) {
             elevator.setStatus(Status.IDLE);
         }
     }

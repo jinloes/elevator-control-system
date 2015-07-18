@@ -8,7 +8,7 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 
 /**
- * Created by jinloes on 7/17/15.
+ * Implementation of {@link Elevator}.
  */
 public class ElevatorImpl implements Elevator {
     private int currentFloor;
