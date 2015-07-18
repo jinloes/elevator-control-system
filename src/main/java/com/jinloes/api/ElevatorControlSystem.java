@@ -3,7 +3,7 @@ package com.jinloes.api;
 import com.jinloes.model.PickUpCall;
 
 /**
- * Created by jinloes on 7/17/15.
+ * Interface for a system that manages an elevator system.
  */
 public interface ElevatorControlSystem {
 
@@ -14,5 +14,15 @@ public interface ElevatorControlSystem {
      */
     void callForPickup(PickUpCall pickUpCall);
 
+    /**
+     * Add a destination to the elevator subsystem.
+     *
+     * @param floor destination floor
+     */
     void addDestination(int floor);
+
+    /**
+     * Iterates through one step of the elevator system.
+     */
+    void step();
 }

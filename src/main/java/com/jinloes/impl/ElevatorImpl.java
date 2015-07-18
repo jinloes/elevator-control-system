@@ -1,8 +1,7 @@
 package com.jinloes.impl;
 
-import com.jinloes.api.Direction;
 import com.jinloes.api.Elevator;
-import com.jinloes.api.Status;
+import com.jinloes.model.Direction;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
@@ -13,27 +12,19 @@ import java.util.Queue;
 public class ElevatorImpl implements Elevator {
     private int currentFloor;
     private final Queue<Integer> destinationQueue;
-    private Status status;
+
+    public ElevatorImpl() {
+        this(0);
+    }
 
     public ElevatorImpl(int currentFloor) {
         this.currentFloor = currentFloor;
-        this.status = Status.IDLE;
         destinationQueue = new ArrayDeque<>();
     }
 
     @Override
     public int getCurrentFloor() {
         return currentFloor;
-    }
-
-    @Override
-    public Status getStatus() {
-        return status;
-    }
-
-    @Override
-    public void setStatus(Status status) {
-        this.status = status;
     }
 
     @Override
@@ -47,20 +38,26 @@ public class ElevatorImpl implements Elevator {
     @Override
     public void moveUp() {
         currentFloor++;
+        System.out.println("Elevator moved up to floor " + currentFloor);
+        checkDestinationReached();
     }
 
     @Override
     public void moveDown() {
         currentFloor--;
+        System.out.println("Elevator moved down to floor " + currentFloor);
+        checkDestinationReached();
+    }
+
+    private void checkDestinationReached() {
+        if (!destinationQueue.isEmpty() && currentFloor == destinationQueue.peek()) {
+            System.out.println("Reached destination floor " + currentFloor);
+            destinationQueue.poll();
+        }
     }
 
     @Override
     public void addDestination(int floor) {
         destinationQueue.add(floor);
-    }
-
-    @Override
-    public boolean hasDestination() {
-        return !destinationQueue.isEmpty();
     }
 }

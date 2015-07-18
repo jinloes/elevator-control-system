@@ -1,15 +1,13 @@
 package com.jinloes.impl;
 
-import com.jinloes.api.Direction;
 import com.jinloes.api.Elevator;
 import com.jinloes.api.ElevatorControlSystem;
+import com.jinloes.model.Direction;
 import com.jinloes.model.PickUpCall;
 import cucumber.api.java.After;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
 import org.mockito.Mockito;
 
 import static org.junit.Assert.fail;
@@ -18,39 +16,99 @@ import static org.junit.Assert.fail;
  * Step definitions for testing a {@link ElevatorControlSystemImpl}.
  */
 public class ElevatorControlSystemStepDefs {
-    @Rule
-    private ExpectedException expectedException = ExpectedException.none();
     private ElevatorControlSystem elevatorControlSystem;
     private Elevator elevator = Mockito.mock(Elevator.class);
     private PickUpCall pickUpPickUpCall;
+    private int destinationFloor;
 
     @After
     public void tearDown() {
-        expectedException = ExpectedException.none();
+        Mockito.reset(elevator);
     }
 
     @Given("^an elevator control system$")
-    public void createControlSystem() throws Throwable {
+    public void createControlSystem() {
         elevatorControlSystem = new ElevatorControlSystemImpl(elevator);
     }
 
+    @Given("^elevator that is waiting$")
+    public void setWaitingExpectation() {
+        Mockito.when(elevator.getDirection()).thenReturn(Direction.WAIT);
+    }
+
+    @Given("^an elevator moving (.+)")
+    public void setDirectionExpectation(String direction) {
+        Mockito.when(elevator.getDirection()).thenReturn(Direction.fromString(direction));
+    }
+
+    @Given("^the elevator's expected floor should be (\\d+)$")
+    public void setExpectedFloor(int floor) throws Throwable {
+        Mockito.when(elevator.getCurrentFloor()).thenReturn(floor);
+    }
+
     @When("^a user calls for a pick up from floor (\\d+) for direction (.+)$")
-    public void callForPickup(int floor, String direction) throws Throwable {
+    public void callForPickup(int floor, String direction) {
         pickUpPickUpCall = PickUpCall.of(Direction.fromString(direction), floor);
     }
 
-    @Then("^the system should be able to handle the call$")
-    public void checkNoException() throws Throwable {
+    @When("^add destination to floor (\\d+) for the elevator$")
+    public void addDestination(int floor) {
+        destinationFloor = floor;
+    }
+
+    @When("^execute one step in the system$")
+    public void executeStep() {
+        elevatorControlSystem.step();
+    }
+
+    @Then("^the call should be processed without error$")
+    public void checkPickUp() {
         elevatorControlSystem.callForPickup(pickUpPickUpCall);
     }
 
-    @Then("^the control system should throw an Illegal Argument Exception$")
-    public void checkIllegalArgumentException() throws Throwable {
+    @Then("^an Illegal Argument Exception should be thrown when adding the call$")
+    public void checkPickUpException() {
         try {
             elevatorControlSystem.callForPickup(pickUpPickUpCall);
             fail("An IllegalArgumentException should have been thrown");
-        } catch(IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             // We expect an illegal argument exception
         }
+    }
+
+    @Then("^the destination should be added to the elevator")
+    public void addDestination() {
+        elevatorControlSystem.addDestination(destinationFloor);
+        Mockito.verify(elevator, Mockito.times(1)).addDestination(destinationFloor);
+    }
+
+    @Then("^an Illegal Argument Exception should be thrown when adding the destination$")
+    public void checkDestinationException() {
+        try {
+            elevatorControlSystem.addDestination(destinationFloor);
+            fail("An IllegalArgumentException should have been thrown");
+        } catch (IllegalArgumentException e) {
+            // We expect an illegal argument exception
+        }
+        Mockito.verifyZeroInteractions(elevator);
+    }
+
+    @Then("^the elevator should be moved up$")
+    public void verifyElevatorMovedUp() {
+        Mockito.verify(elevator).moveUp();
+    }
+
+    @Then("^the elevator should be moved down$")
+    public void verifyElevatorMovedDown() {
+        Mockito.verify(elevator).moveDown();
+    }
+
+    @Then("^no destination should be added for the elevator$")
+    public void verifyNoDestinationsAdded() {
+        Mockito.verify(elevator, Mockito.never()).addDestination(Mockito.anyInt());
+    }
+
+    @Then("^the user should be picked up$")
+    public void checkUserPickedUp() {
     }
 }

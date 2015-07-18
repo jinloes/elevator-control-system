@@ -1,4 +1,4 @@
-package com.jinloes.api;
+package com.jinloes.model;
 
 import org.apache.commons.lang3.StringUtils;
 

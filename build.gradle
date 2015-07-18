@@ -28,6 +28,7 @@ task cucumber() {
 
 dependencies {
     compile 'org.apache.commons:commons-lang3:3.4'
+    compile 'com.google.guava:guava:18.0'
     testCompile 'info.cukes:cucumber-java:1.2.3'
     testCompile 'info.cukes:cucumber-junit:1.2.3'
     testCompile 'junit:junit:4.11'

@@ -1,6 +1,6 @@
 package com.jinloes.model;
 
-import com.jinloes.api.Direction;
+import java.util.Objects;
 
 /**
  * Models a pick up call in the elevator control system.
@@ -31,5 +31,19 @@ public final class PickUpCall {
      */
     public static final PickUpCall of(Direction direction, int floor) {
         return new PickUpCall(direction, floor);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PickUpCall that = (PickUpCall) o;
+        return Objects.equals(floor, that.floor) &&
+                Objects.equals(direction, that.direction);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(direction, floor);
     }
 }

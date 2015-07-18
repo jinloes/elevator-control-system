@@ -1,22 +1,39 @@
 package com.jinloes.api;
 
+import com.jinloes.model.Direction;
+
 /**
- * Created by jinloes on 7/17/15.
+ * An interface for an elevator.
  */
 public interface Elevator {
+    /**
+     * Returns the current floor the elevator is at.
+     *
+     * @return
+     */
     int getCurrentFloor();
 
-    Status getStatus();
-
-    void setStatus(Status status);
-
+    /**
+     * Returns the next direction the elevator will take.
+     *
+     * @return the elevator's direction.
+     */
     Direction getDirection();
 
+    /**
+     * Moves the elevator up a floor.
+     */
     void moveUp();
 
+    /**
+     * Moves the elevator down a floor.
+     */
     void moveDown();
 
+    /**
+     * Adds a destination to the elevator.
+     *
+     * @param floor destination floor
+     */
     void addDestination(int floor);
-
-    boolean hasDestination();
 }
