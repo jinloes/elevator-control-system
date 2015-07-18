@@ -1,0 +1,34 @@
+group 'com.jinloes'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    cucumberRuntime {
+        extendsFrom testRuntime
+    }
+}
+
+task cucumber() {
+    dependsOn assemble, compileTestJava
+    doLast {
+        javaexec {
+            main = "cucumber.api.cli.Main"
+            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+            args = ['--plugin', 'pretty', '--glue', 'com.jinloes', 'src/test/resources']
+        }
+    }
+}
+
+dependencies {
+    testCompile 'info.cukes:cucumber-java:1.2.3'
+    testCompile 'info.cukes:cucumber-junit:1.2.3'
+
+    testCompile 'junit:junit:4.11'
+}
