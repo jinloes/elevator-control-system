@@ -1,11 +1,11 @@
 # Elevator Control System
 
-    The elevator system is split primarily into two main classes, ElevatorControlSystem and  
-    Elevator. ElevatorControlSystem is responsible for handling input and making decisions about 
-    what the elevators should do next. Elevator is just a model class that processes state change 
-    requests sent by the control system. The Elevator class is meant to be a "dumb" class that only
-    what it is told to do by the control system. This makes the control system the engine of the 
-    overall system.
+The elevator system is split primarily into two main classes ElevatorControlSystem and  
+Elevator. ElevatorControlSystem is responsible for handling input and making decisions about 
+what the elevators should do next. Elevator is just a model class that processes state change 
+requests sent by the control system. The Elevator class is meant to be a "dumb" class that only
+what it is told to do by the control system. This makes the control system the engine of the 
+overall system.
     
 Requirements
 ============
