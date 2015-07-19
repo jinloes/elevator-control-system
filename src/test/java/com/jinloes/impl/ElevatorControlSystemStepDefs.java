@@ -4,6 +4,7 @@ import com.jinloes.api.Elevator;
 import com.jinloes.api.ElevatorControlSystem;
 import com.jinloes.model.Direction;
 import com.jinloes.model.PickUpCall;
+import com.jinloes.model.DoorState;
 import cucumber.api.java.After;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -33,7 +34,7 @@ public class ElevatorControlSystemStepDefs {
 
     @Given("^elevator that is waiting$")
     public void setWaitingExpectation() {
-        Mockito.when(elevator.getDirection()).thenReturn(Direction.WAIT);
+        Mockito.when(elevator.getDirection()).thenReturn(Direction.IDLE);
     }
 
     @Given("^an elevator moving (.+)")
@@ -44,6 +45,16 @@ public class ElevatorControlSystemStepDefs {
     @Given("^the elevator's expected floor should be (\\d+)$")
     public void setExpectedFloor(int floor) throws Throwable {
         Mockito.when(elevator.getCurrentFloor()).thenReturn(floor);
+    }
+
+    @Given("^elevator doors are closed$")
+    public void setClosedDoorsExpectation() throws Throwable {
+        Mockito.when(elevator.getDoorState()).thenReturn(DoorState.CLOSED);
+    }
+
+    @Given("^elevator doors are open$")
+    public void setOpenDoorsExpectation() throws Throwable {
+        Mockito.when(elevator.getDoorState()).thenReturn(DoorState.OPEN);
     }
 
     @When("^a user calls for a pick up from floor (\\d+) for direction (.+)$")
@@ -110,5 +121,20 @@ public class ElevatorControlSystemStepDefs {
 
     @Then("^the user should be picked up$")
     public void checkUserPickedUp() {
+    }
+
+    @When("^send request to open the doors$")
+    public void openDoorsRequest() throws Throwable {
+        elevatorControlSystem.openDoors();
+    }
+
+    @Then("^the doors should stay open$")
+    public void verifyDoorsOpen() throws Throwable {
+        Mockito.verify(elevator).setDoorState(DoorState.OPEN);
+    }
+
+    @Then("^the doors should be closed$")
+    public void verifyDoorsClosed() throws Throwable {
+        Mockito.verify(elevator).setDoorState(DoorState.CLOSED);
     }
 }

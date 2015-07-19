@@ -17,7 +17,7 @@ public enum Direction {
     /**
      * Indicates the elevator is waiting.
      */
-    WAIT;
+    IDLE;
 
     /**
      * Calculates a direction based on the current floor and target floor.
@@ -26,7 +26,7 @@ public enum Direction {
      * @param targetFloor  elevator's  target floor
      * @return {@link Direction#DOWN} if the current floor is greater than the target floor.
      * {@link Direction#UP} if the current floor is less than the target floor.
-     * {@link Direction#WAIT} if the current floor is equal to the target floor.
+     * {@link Direction#IDLE} if the current floor is equal to the target floor.
      */
     public static Direction calculate(int currentFloor, int targetFloor) {
         if (currentFloor > targetFloor) {
@@ -34,7 +34,7 @@ public enum Direction {
         } else if (currentFloor < targetFloor) {
             return UP;
         } else {
-            return WAIT;
+            return IDLE;
         }
     }
 

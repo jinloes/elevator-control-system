@@ -1,11 +1,16 @@
 package com.jinloes.model;
 
+import com.google.common.base.Preconditions;
+
+import java.util.EnumSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Models a pick up call in the elevator control system.
  */
 public final class PickUpCall {
+    private static final Set<Direction> ALLOWED_PICKUP_OPTIONS = EnumSet.of(Direction.UP, Direction.DOWN);
     private final Direction direction;
     private final int floor;
 
@@ -26,10 +31,12 @@ public final class PickUpCall {
      * Static factory for creating a pick up call request.
      *
      * @param direction direction that the user wishes to travel in
-     * @param floor     floor the user call for a pick up from
+     * @param floor floor the user call for a pick up from
      * @return {@link PickUpCall} object
      */
-    public static final PickUpCall of(Direction direction, int floor) {
+    public static PickUpCall of(Direction direction, int floor) {
+        Preconditions.checkArgument(ALLOWED_PICKUP_OPTIONS.contains(direction), "Direction :" +
+                direction.toString() + " is not allowed for pickup");
         return new PickUpCall(direction, floor);
     }
 

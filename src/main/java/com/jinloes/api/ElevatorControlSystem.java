@@ -21,6 +21,8 @@ public interface ElevatorControlSystem {
      */
     void addDestination(int floor);
 
+    void openDoors();
+
     /**
      * Iterates through one step of the elevator system.
      */

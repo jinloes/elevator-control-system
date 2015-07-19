@@ -2,11 +2,14 @@ package com.jinloes.impl;
 
 import com.jinloes.api.Elevator;
 import com.jinloes.model.Direction;
+import com.jinloes.model.DoorState;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 /**
  * Step definitions for testing a {@link Elevator} object.
@@ -59,11 +62,26 @@ public class ElevatorStepDefs {
 
     @Then("^the elevator should be waiting$")
     public void checkDirection() throws Throwable {
-        assertEquals(Direction.WAIT, elevator.getDirection());
+        assertEquals(Direction.IDLE, elevator.getDirection());
     }
 
     @Then("^it's current floor should be (\\d+)$")
     public void checkCurrentFloor(int expectedFloor) throws Throwable {
         assertEquals(expectedFloor, elevator.getCurrentFloor());
+    }
+
+    @And("^the elevator's doors should be open$")
+    public void the_elevator_s_doors_should_be_open() throws Throwable {
+        assertEquals(DoorState.OPEN, elevator.getDoorState());
+    }
+
+    @When("^remove floor (\\d+) from the destination queue$")
+    public void removeFloor(int floor) throws Throwable {
+        elevator.removeDestination(floor);
+    }
+
+    @Then("^the elevator should not have floor (\\d+) as a destination$")
+    public void checkNotContainsFloor(int floor) throws Throwable {
+        assertFalse(elevator.containsDestination(floor));
     }
 }

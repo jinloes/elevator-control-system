@@ -26,10 +26,11 @@ Feature: An elevator
 
   Scenario: it should wait if it does not have a destination
     Given an elevator starting at floor 0
-    Then the direction should be wait
+    Then the direction should be idle
 
-  Scenario: it should pick a new destination once it reaches it's target floor
-    Given an elevator starting at floor 0
+  Scenario: it should remove all destinations for a given floor
+    Given a default elevator
     When add destination to floor 1
-    And move the elevator up a floor
-    Then the elevator should be waiting
+    When add destination to floor 1
+    When remove floor 1 from the destination queue
+    Then the elevator should not have floor 1 as a destination
