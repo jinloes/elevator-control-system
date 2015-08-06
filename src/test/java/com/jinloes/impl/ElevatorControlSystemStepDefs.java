@@ -15,7 +15,7 @@ import org.mockito.Mockito;
 import static org.junit.Assert.fail;
 
 /**
- * Step definitions for testing a {@link AsyncElevatorControlSystem}.
+ * Step definitions for testing a {@link ElevatorControlSystemImpl}.
  */
 public class ElevatorControlSystemStepDefs {
     private ElevatorControlSystem elevatorControlSystem;
@@ -30,7 +30,7 @@ public class ElevatorControlSystemStepDefs {
 
     @Given("^an elevator control system$")
     public void createControlSystem() {
-        elevatorControlSystem = new AsyncElevatorControlSystem(elevator);
+        elevatorControlSystem = new ElevatorControlSystemImpl(elevator);
     }
 
     @Given("^elevator that is waiting$")

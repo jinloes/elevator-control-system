@@ -2,7 +2,7 @@ package com.jinloes;
 
 import com.jinloes.api.Elevator;
 import com.jinloes.api.ElevatorControlSystem;
-import com.jinloes.impl.AsyncElevatorControlSystem;
+import com.jinloes.impl.ElevatorControlSystemImpl;
 import com.jinloes.impl.ElevatorImpl;
 import com.jinloes.model.PickUpDirection;
 import com.jinloes.model.PickUpCall;
@@ -21,7 +21,7 @@ public class ElevatorSystemTester {
     public static void main(String[] args) throws InterruptedException {
         try {
             Elevator elevator = new ElevatorImpl();
-            ElevatorControlSystem controlSystem = new AsyncElevatorControlSystem(elevator);
+            ElevatorControlSystem controlSystem = new ElevatorControlSystemImpl(elevator);
             scheduleCalls(controlSystem);
             runSimulation(controlSystem);
         } finally {

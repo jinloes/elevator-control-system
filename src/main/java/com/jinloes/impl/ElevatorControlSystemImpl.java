@@ -21,19 +21,19 @@ import static com.jinloes.model.State.IDLE;
 /**
  * Created by rr2re on 8/5/2015.
  */
-public class AsyncElevatorControlSystem extends AbstractVerticle implements ElevatorControlSystem {
-    private static final Logger LOGGER = Logger.getLogger(AsyncElevatorControlSystem.class.toString());
+public class ElevatorControlSystemImpl extends AbstractVerticle implements ElevatorControlSystem {
+    private static final Logger LOGGER = Logger.getLogger(ElevatorControlSystemImpl.class.toString());
     public static final String ADD_DESTINATION_ADDRESS = "addDestination";
     public static final String PICKUP_ADDRESS = "pickup";
     private Elevator elevator;
     private Queue<PickUpCall> pickUpCallQueue;
     private static final int TOP_FLOOR = 10;
 
-    public AsyncElevatorControlSystem() {
+    public ElevatorControlSystemImpl() {
         this(new ElevatorImpl());
     }
 
-    public AsyncElevatorControlSystem(Elevator elevator) {
+    public ElevatorControlSystemImpl(Elevator elevator) {
         this.elevator = elevator;
         this.pickUpCallQueue = new ArrayDeque<>();
     }

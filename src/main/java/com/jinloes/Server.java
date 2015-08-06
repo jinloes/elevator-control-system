@@ -1,6 +1,6 @@
 package com.jinloes;
 
-import com.jinloes.impl.AsyncElevatorControlSystem;
+import com.jinloes.impl.ElevatorControlSystemImpl;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.EventBus;
@@ -15,16 +15,16 @@ import java.util.concurrent.TimeUnit;
  * Created by rr2re on 8/5/2015.
  */
 public class Server extends AbstractVerticle {
-    private AsyncElevatorControlSystem elevatorControlSystem;
+    private ElevatorControlSystemImpl elevatorControlSystem;
 
     public static void main(String[] args) {
         Vertx vertx = Vertx.vertx();
-        AsyncElevatorControlSystem elevatorControlSystem = new AsyncElevatorControlSystem();
+        ElevatorControlSystemImpl elevatorControlSystem = new ElevatorControlSystemImpl();
         vertx.deployVerticle(new Server(elevatorControlSystem));
         vertx.deployVerticle(elevatorControlSystem);
     }
 
-    public Server(AsyncElevatorControlSystem elevatorControlSystem) {
+    public Server(ElevatorControlSystemImpl elevatorControlSystem) {
         this.elevatorControlSystem = elevatorControlSystem;
     }
 
@@ -37,13 +37,13 @@ public class Server extends AbstractVerticle {
         router.route().handler(BodyHandler.create());
         router.post("/elevator/destination").handler(routingContext -> {
             JsonObject body = routingContext.getBodyAsJson();
-            eventBus.send(AsyncElevatorControlSystem.ADD_DESTINATION_ADDRESS, body.getInteger("destination"));
+            eventBus.send(ElevatorControlSystemImpl.ADD_DESTINATION_ADDRESS, body.getInteger("destination"));
             HttpServerResponse response = routingContext.response();
             response.setStatusCode(204);
         });
         router.post("/pickup").handler(routingContext -> {
             JsonObject body = routingContext.getBodyAsJson();
-            eventBus.send(AsyncElevatorControlSystem.PICKUP_ADDRESS, body);
+            eventBus.send(ElevatorControlSystemImpl.PICKUP_ADDRESS, body);
             HttpServerResponse response = routingContext.response();
             response.setStatusCode(204);
         });
