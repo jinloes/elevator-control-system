@@ -1,6 +1,6 @@
 package com.jinloes.api;
 
-import com.jinloes.model.Direction;
+import com.jinloes.model.State;
 import com.jinloes.model.DoorState;
 
 /**
@@ -24,11 +24,11 @@ public interface Elevator {
     int getCurrentFloor();
 
     /**
-     * Returns the next direction the elevator will take.
+     * Returns the elevator's state.
      *
-     * @return the elevator's direction.
+     * @return the elevator's state.
      */
-    Direction getDirection();
+    State getState();
 
     /**
      * Moves the elevator up a floor.
@@ -61,4 +61,8 @@ public interface Elevator {
      * @param floor floor to remove
      */
     int removeDestination(int floor);
+
+    void step();
+
+    int getDestinationFloor();
 }

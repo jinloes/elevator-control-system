@@ -2,9 +2,10 @@ package com.jinloes.impl;
 
 import com.jinloes.api.Elevator;
 import com.jinloes.api.ElevatorControlSystem;
-import com.jinloes.model.Direction;
-import com.jinloes.model.PickUpCall;
 import com.jinloes.model.DoorState;
+import com.jinloes.model.PickUpCall;
+import com.jinloes.model.PickUpDirection;
+import com.jinloes.model.State;
 import cucumber.api.java.After;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -14,7 +15,7 @@ import org.mockito.Mockito;
 import static org.junit.Assert.fail;
 
 /**
- * Step definitions for testing a {@link ElevatorControlSystemImpl}.
+ * Step definitions for testing a {@link AsyncElevatorControlSystem}.
  */
 public class ElevatorControlSystemStepDefs {
     private ElevatorControlSystem elevatorControlSystem;
@@ -29,17 +30,17 @@ public class ElevatorControlSystemStepDefs {
 
     @Given("^an elevator control system$")
     public void createControlSystem() {
-        elevatorControlSystem = new ElevatorControlSystemImpl(elevator);
+        elevatorControlSystem = new AsyncElevatorControlSystem(elevator);
     }
 
     @Given("^elevator that is waiting$")
     public void setWaitingExpectation() {
-        Mockito.when(elevator.getDirection()).thenReturn(Direction.IDLE);
+        Mockito.when(elevator.getState()).thenReturn(State.IDLE);
     }
 
     @Given("^an elevator moving (.+)")
     public void setDirectionExpectation(String direction) {
-        Mockito.when(elevator.getDirection()).thenReturn(Direction.fromString(direction));
+        Mockito.when(elevator.getState()).thenReturn(State.fromString(direction));
     }
 
     @Given("^the elevator's expected floor should be (\\d+)$")
@@ -59,10 +60,10 @@ public class ElevatorControlSystemStepDefs {
 
     @When("^a user calls for a pick up from floor (\\d+) for direction (.+)$")
     public void callForPickup(int floor, String direction) {
-        pickUpPickUpCall = PickUpCall.of(Direction.fromString(direction), floor);
+        pickUpPickUpCall = PickUpCall.of(PickUpDirection.fromString(direction), floor);
     }
 
-    @When("^add destination to floor (\\d+) for the elevator$")
+    @When("^add floor (\\d+) as a destination for the elevator$")
     public void addDestination(int floor) {
         destinationFloor = floor;
     }
@@ -74,13 +75,13 @@ public class ElevatorControlSystemStepDefs {
 
     @Then("^the call should be processed without error$")
     public void checkPickUp() {
-        elevatorControlSystem.callForPickup(pickUpPickUpCall);
+        elevatorControlSystem.processPickUpCall(pickUpPickUpCall);
     }
 
     @Then("^an Illegal Argument Exception should be thrown when adding the call$")
     public void checkPickUpException() {
         try {
-            elevatorControlSystem.callForPickup(pickUpPickUpCall);
+            elevatorControlSystem.processPickUpCall(pickUpPickUpCall);
             fail("An IllegalArgumentException should have been thrown");
         } catch (IllegalArgumentException e) {
             // We expect an illegal argument exception
@@ -106,12 +107,12 @@ public class ElevatorControlSystemStepDefs {
 
     @Then("^the elevator should be moved up$")
     public void verifyElevatorMovedUp() {
-        Mockito.verify(elevator).moveUp();
+        Mockito.verify(elevator).step();
     }
 
     @Then("^the elevator should be moved down$")
     public void verifyElevatorMovedDown() {
-        Mockito.verify(elevator).moveDown();
+        Mockito.verify(elevator).step();
     }
 
     @Then("^no destination should be added for the elevator$")
@@ -136,5 +137,20 @@ public class ElevatorControlSystemStepDefs {
     @Then("^the doors should be closed$")
     public void verifyDoorsClosed() throws Throwable {
         Mockito.verify(elevator).setDoorState(DoorState.CLOSED);
+    }
+
+    @Given("^the elevator is moving up$")
+    public void setElevatorMovingUp() throws Throwable {
+        Mockito.when(elevator.getState()).thenReturn(State.MOVING_UP);
+    }
+
+    @Given("^the elevator is moving down$")
+    public void setElevatorMovingDown() throws Throwable {
+        Mockito.when(elevator.getState()).thenReturn(State.MOVING_DOWN);
+    }
+
+    @Given("^the elevator is idle$")
+    public void setElevatorIdle() throws Throwable {
+        Mockito.when(elevator.getState()).thenReturn(State.IDLE);
     }
 }

@@ -17,12 +17,13 @@ Feature: An elevator
   Scenario Outline: it should return it's current direction
     Given an elevator starting at floor <floor>
     And destination <destination floor>
+    When execute one elevator step
     Then the direction should be <direction>
 
     Examples:
       | floor | destination floor | direction |
-      | 0     | 10                | UP        |
-      | 10    | 0                 | DOWN      |
+      | 0     | 10                | MOVING_UP        |
+      | 10    | 0                 | MOVING_DOWN      |
 
   Scenario: it should wait if it does not have a destination
     Given an elevator starting at floor 0

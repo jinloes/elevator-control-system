@@ -12,7 +12,7 @@ public interface ElevatorControlSystem {
      *
      * @param pickUpCall {@link PickUpCall} request
      */
-    void callForPickup(PickUpCall pickUpCall);
+    void processPickUpCall(PickUpCall pickUpCall);
 
     /**
      * Add a destination to the elevator subsystem.

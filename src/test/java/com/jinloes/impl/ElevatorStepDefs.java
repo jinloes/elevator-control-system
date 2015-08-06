@@ -1,8 +1,9 @@
 package com.jinloes.impl;
 
 import com.jinloes.api.Elevator;
-import com.jinloes.model.Direction;
+import com.jinloes.model.State;
 import com.jinloes.model.DoorState;
+import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -56,13 +57,13 @@ public class ElevatorStepDefs {
 
     @Then("^the direction should be (.+)$")
     public void checkDirection(String direction) throws Throwable {
-        Direction expected = Direction.fromString(direction);
-        assertEquals(expected, elevator.getDirection());
+        State expected = State.fromString(direction);
+        assertEquals(expected, elevator.getState());
     }
 
     @Then("^the elevator should be waiting$")
     public void checkDirection() throws Throwable {
-        assertEquals(Direction.IDLE, elevator.getDirection());
+        assertEquals(State.IDLE, elevator.getState());
     }
 
     @Then("^it's current floor should be (\\d+)$")
@@ -83,5 +84,10 @@ public class ElevatorStepDefs {
     @Then("^the elevator should not have floor (\\d+) as a destination$")
     public void checkNotContainsFloor(int floor) throws Throwable {
         assertFalse(elevator.containsDestination(floor));
+    }
+
+    @When("^execute one elevator step$")
+    public void executeElevatorStep() throws Throwable {
+        elevator.step();
     }
 }

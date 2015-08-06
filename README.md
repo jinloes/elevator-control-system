@@ -54,9 +54,9 @@ The algorithm is as follows:
 
 - If the doors are open, check for any door commands and execute them. 
 - If there are none, close the doors and try and move the elevator.
-- To move the elevator, the direction needs to be determined.
+- To move the elevator, the state needs to be determined.
     - An elevator will move to it's destination picking up anyone that wants to travel in the same 
-        direction along the way or lets people off the elevator if they pressed a floor in between 
+        state along the way or lets people off the elevator if they pressed a floor in between
         the current and destination.
     - Once the elevator has reached the destination, it lets the people off and waits until a pick 
     up call is assigned to it or moves to a new destination if it still has other destinations 

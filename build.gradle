@@ -42,6 +42,9 @@ task cucumber() {
 }
 
 dependencies {
+    compile 'org.springframework.boot:spring-boot-starter'
+    compile 'io.vertx:vertx-core:3.0.0'
+    compile 'io.vertx:vertx-web:3.0.0'
     compile 'org.apache.commons:commons-lang3:3.4'
     compile 'com.google.guava:guava:18.0'
     testCompile 'info.cukes:cucumber-java:1.2.3'

@@ -2,9 +2,9 @@ package com.jinloes;
 
 import com.jinloes.api.Elevator;
 import com.jinloes.api.ElevatorControlSystem;
-import com.jinloes.impl.ElevatorControlSystemImpl;
+import com.jinloes.impl.AsyncElevatorControlSystem;
 import com.jinloes.impl.ElevatorImpl;
-import com.jinloes.model.Direction;
+import com.jinloes.model.PickUpDirection;
 import com.jinloes.model.PickUpCall;
 
 import java.util.concurrent.Executors;
@@ -21,7 +21,7 @@ public class ElevatorSystemTester {
     public static void main(String[] args) throws InterruptedException {
         try {
             Elevator elevator = new ElevatorImpl();
-            ElevatorControlSystem controlSystem = new ElevatorControlSystemImpl(elevator);
+            ElevatorControlSystem controlSystem = new AsyncElevatorControlSystem(elevator);
             scheduleCalls(controlSystem);
             runSimulation(controlSystem);
         } finally {
@@ -32,18 +32,18 @@ public class ElevatorSystemTester {
     private static void scheduleCalls(ElevatorControlSystem controlSystem) {
         // Make duplicate calls and add a destination
         EXECUTOR_SERVICE.schedule((Runnable) () -> {
-            controlSystem.callForPickup(PickUpCall.of(Direction.UP, 5));
-            controlSystem.callForPickup(PickUpCall.of(Direction.UP, 5));
+            controlSystem.processPickUpCall(PickUpCall.of(PickUpDirection.UP, 5));
+            controlSystem.processPickUpCall(PickUpCall.of(PickUpDirection.UP, 5));
             controlSystem.addDestination(8);
         }, 2, TimeUnit.SECONDS);
         /// Add another duplicate call and a destination that's on the way of the previous one.
         EXECUTOR_SERVICE.schedule((Runnable) () -> {
-            controlSystem.callForPickup(PickUpCall.of(Direction.UP, 5));
-            controlSystem.callForPickup(PickUpCall.of(Direction.DOWN, 6));
+            controlSystem.processPickUpCall(PickUpCall.of(PickUpDirection.DOWN, 5));
+            controlSystem.processPickUpCall(PickUpCall.of(PickUpDirection.UP, 6));
         }, 3, TimeUnit.SECONDS);
         // Switch direction of the elevator.
         EXECUTOR_SERVICE.schedule((Runnable) () ->
-                controlSystem.callForPickup(PickUpCall.of(Direction.UP, 1)), 4, TimeUnit.SECONDS);
+                controlSystem.processPickUpCall(PickUpCall.of(PickUpDirection.UP, 1)), 4, TimeUnit.SECONDS);
         EXECUTOR_SERVICE.schedule((Runnable) () -> controlSystem.addDestination(7),
                 4, TimeUnit.SECONDS);
     }
