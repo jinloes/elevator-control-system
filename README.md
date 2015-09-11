@@ -14,15 +14,21 @@ Requirements
 2. Gradle 2.3 or later (for building)
     * https://gradle.org/downloads/
     
-Run Tests
-=========
+Run Tests (Cucumber)
+====================
 
-    - cd to project root directory
-    - gradle cucumber
-    - see src/test/sources/*.feature for unit test cases for the system that describe the behavior
+- cd to project root directory
+- gradle cucumber
+- see src/test/sources/*.feature for unit test cases for the system that describe the behavior
+- report in build/html-cucumber-report
     
 Output from the cucumber tests will be in the console.
-    
+
+Run Tests (Spock)
+=================
+
+- gradle clean test
+- report is in build/spock-reports
     
 Simulation
 ==========
@@ -52,13 +58,19 @@ Algorithm
 
 The algorithm is as follows:
 
-- If the doors are open, check for any door commands and execute them. 
-- If there are none, close the doors and try and move the elevator.
-- To move the elevator, the state needs to be determined.
-    - An elevator will move to it's destination picking up anyone that wants to travel in the same 
-        state along the way or lets people off the elevator if they pressed a floor in between
-        the current and destination.
-    - Once the elevator has reached the destination, it lets the people off and waits until a pick 
-    up call is assigned to it or moves to a new destination if it still has other destinations 
-    to move to.
-    - The elevator will remain idle if there are no pick up commands to service.
+Elevator Management
+-------------------
+
+- If the elevator's doors are open, the system will close the elevator's doors
+- If the elevator's doors are closed
+    - If the elevator is idle, then the elevator will see if there are and pick up calls
+    - Then the elevator control system will execute on step for the elevator
+
+Pickup Call Management
+----------------------
+
+- If the elevator is idle, assign the call to it
+- If the elevator is moving up and the pick up floor is less than the destination floor but greater than the current 
+floor and the elevator is moving up, assign the call to it
+- If the elevator is moving down and the pickup floor is greater than the destination floor but less than the current 
+floor and the elevator is moving down, assign the call to it

@@ -61,4 +61,27 @@ class ElevatorControlSystemSpec extends Specification {
         then: "no destination should be added to the elevator"
             0 * elevator.addDestination(_ as int)
     }
+
+    def "A system should add a destination to an elevator"() {
+        given: "An elevator"
+            def elevator = Mock(Elevator)
+        and: "an elevator control system"
+            def controlSystem = new ElevatorControlSystemImpl(elevator)
+        when: "receive a request to add a destination"
+            controlSystem.addDestination(5)
+        then: "the destination should be added to the elevator"
+            1 * elevator.addDestination(5)
+    }
+
+    def "A system should not add a destination greater than the top floor"() {
+        given: "An elevator"
+            def elevator = Mock(Elevator)
+        and: "an elevator control system"
+            def controlSystem = new ElevatorControlSystemImpl(elevator)
+        when: "receive a request to add a destination"
+            controlSystem.addDestination(11)
+        then: "the destination should not be added to the elevator"
+            0 * elevator.addDestination(11)
+            thrown(IllegalArgumentException)
+    }
 }

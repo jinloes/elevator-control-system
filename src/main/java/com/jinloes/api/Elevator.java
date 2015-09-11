@@ -62,7 +62,14 @@ public interface Elevator {
      */
     int removeDestination(int floor);
 
+    /**
+     * Executes one step for the elevator.
+     */
     void step();
 
+    /**
+     * Returns the destination floor.
+     * @return destination floor
+     */
     int getDestinationFloor();
 }
