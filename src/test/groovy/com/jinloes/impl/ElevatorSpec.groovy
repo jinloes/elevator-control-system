@@ -1,4 +1,5 @@
-import com.jinloes.impl.ElevatorImpl
+package com.jinloes.impl
+
 import spock.lang.Specification
 
 import static org.hamcrest.Matchers.is
