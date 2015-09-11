@@ -18,7 +18,7 @@ public class ElevatorSystemTester {
     private static final ScheduledExecutorService EXECUTOR_SERVICE =
             Executors.newSingleThreadScheduledExecutor();
 
-    public static void main(String[] args) throws InterruptedException {
+    /*public static void main(String[] args) throws InterruptedException {
         try {
             Elevator elevator = new ElevatorImpl();
             ElevatorControlSystem controlSystem = new ElevatorControlSystemImpl(elevator);
@@ -27,7 +27,7 @@ public class ElevatorSystemTester {
         } finally {
             EXECUTOR_SERVICE.shutdown();
         }
-    }
+    }*/
 
     private static void scheduleCalls(ElevatorControlSystem controlSystem) {
         // Make duplicate calls and add a destination
