@@ -84,4 +84,15 @@ class ElevatorControlSystemSpec extends Specification {
             0 * elevator.addDestination(11)
             thrown(IllegalArgumentException)
     }
+
+    def "A system should tell and elevator to open its doors"() {
+        given: "An elevator"
+            def elevator = Mock(Elevator)
+        and: "an elevator control system"
+            def controlSystem = new ElevatorControlSystemImpl(elevator)
+        when: "receive a message to open an elevator's doors"
+            controlSystem.openDoors();
+        then: "the elevator should open it's doors"
+            1 * elevator.setDoorState(DoorState.OPEN);
+    }
 }

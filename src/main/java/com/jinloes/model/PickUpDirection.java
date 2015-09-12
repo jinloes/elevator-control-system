@@ -12,4 +12,8 @@ public enum PickUpDirection {
     public static PickUpDirection fromString(String str) {
         return StringUtils.isNotEmpty(str) ? valueOf(str.toUpperCase()) : null;
     }
+
+    public String toString() {
+        return this.name().toLowerCase();
+    }
 }

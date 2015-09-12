@@ -7,9 +7,6 @@ import com.jinloes.model.DoorState;
 import com.jinloes.model.PickUpCall;
 import com.jinloes.model.PickUpDirection;
 import com.jinloes.model.State;
-import io.vertx.core.AbstractVerticle;
-import io.vertx.core.eventbus.Message;
-import io.vertx.core.json.JsonObject;
 
 import java.util.ArrayDeque;
 import java.util.Objects;
@@ -19,12 +16,10 @@ import java.util.logging.Logger;
 import static com.jinloes.model.State.IDLE;
 
 /**
- * Created by rr2re on 8/5/2015.
+ * Implementation of {@link ElevatorControlSystem}.
  */
-public class ElevatorControlSystemImpl extends AbstractVerticle implements ElevatorControlSystem {
+public class ElevatorControlSystemImpl implements ElevatorControlSystem {
     private static final Logger LOGGER = Logger.getLogger(ElevatorControlSystemImpl.class.toString());
-    public static final String ADD_DESTINATION_ADDRESS = "addDestination";
-    public static final String PICKUP_ADDRESS = "pickup";
     private Elevator elevator;
     private Queue<PickUpCall> pickUpCallQueue;
     private static final int TOP_FLOOR = 10;
@@ -37,27 +32,6 @@ public class ElevatorControlSystemImpl extends AbstractVerticle implements Eleva
         this.elevator = elevator;
         this.pickUpCallQueue = new ArrayDeque<>();
     }
-
-    @Override
-    public void start() {
-        vertx.eventBus().consumer(ADD_DESTINATION_ADDRESS, this::handleDestinationMessage);
-        vertx.eventBus().consumer(PICKUP_ADDRESS, this::handlePickUpCall);
-    }
-
-    // Message handlers
-
-    private void handleDestinationMessage(Message<Integer> message) {
-        addDestination(message.body());
-    }
-
-    private void handlePickUpCall(Message<JsonObject> message) {
-        JsonObject body = message.body();
-        PickUpCall pickUpCall = PickUpCall.of(PickUpDirection.fromString(body.getString("direction")),
-                body.getInteger("floor"));
-        processPickUpCall(pickUpCall);
-    }
-
-    // End message handlers
 
     @Override
     public void processPickUpCall(PickUpCall pickUpCall) {
