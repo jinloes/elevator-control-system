@@ -9,25 +9,27 @@ import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
+import org.jacpfx.vertx.spring.SpringVerticle;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
 
 /**
  * Vertx configuration class.
  */
+@Component
+@SpringVerticle(springConfig = AppConfig.class, autoremoveOtherSpringVerticles = false)
 public class Server extends AbstractVerticle {
+    private final ElevatorControlSystem elevatorControlSystem;
 
-    public static void main(String[] args) {
-        Vertx vertx = Vertx.vertx();
-        vertx.deployVerticle(new Server());
-        vertx.deployVerticle(new ElevatorControlSystemVerticle());
+    @Autowired
+    public Server(@Qualifier("elevatorControlSystemProxy") ElevatorControlSystem elevatorControlSystem) {
+        this.elevatorControlSystem = elevatorControlSystem;
     }
-
     @Override
     public void start() {
-        ElevatorControlSystem elevatorControlSystem = ElevatorControlSystem.createProxy(vertx,
-                ElevatorControlSystemVerticle.ELEVATOR_SYSTEM_ADDRESS);
-
         vertx.setPeriodic(TimeUnit.SECONDS.toMillis(1), event -> elevatorControlSystem.step());
 
         Router router = Router.router(vertx);

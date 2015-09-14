@@ -7,6 +7,7 @@ import com.jinloes.model.DoorState;
 import com.jinloes.model.PickUpCall;
 import com.jinloes.model.PickUpDirection;
 import com.jinloes.model.State;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayDeque;
 import java.util.Objects;

@@ -50,6 +50,7 @@ dependencies {
             'io.vertx:vertx-web:3.0.0',
             'io.vertx:vertx-service-proxy:3.0.0',
             'io.vertx:vertx-codegen:3.0.0',
+            'org.jacpfx.vertx.spring:vertx-spring-ext:2.0.0',
             'org.apache.commons:commons-lang3:3.4',
             'com.google.guava:guava:18.0')
     testCompile(
