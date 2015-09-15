@@ -61,7 +61,8 @@ dependencies {
             'junit:junit:4.12',
             'org.codehaus.groovy:groovy-all:2.4.4',
             'org.spockframework:spock-core:1.0-groovy-2.4',
-            'org.hamcrest:hamcrest-all:1.3'
+            'org.hamcrest:hamcrest-all:1.3',
+            'io.vertx:vertx-unit:3.0.0'
     )
     testRuntime(
             'com.athaydes:spock-reports:1.2.7'
